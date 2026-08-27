@@ -8,7 +8,7 @@
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
@@ -30,23 +30,26 @@
             padding: 12px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
             gap: 16px;
         }
 
         @media (min-width: 900px) {
             body {
-                padding: 20px;
+                padding: 24px;
             }
             .container {
-                grid-template-columns: 1.5fr 1fr;
-                gap: 20px;
+                display: grid;
+                grid-template-columns: 1.4fr 1fr;
+                gap: 24px;
+                align-items: start;
             }
         }
 
@@ -54,8 +57,9 @@
             background: var(--card-bg);
             border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-color);
+            width: 100%;
         }
 
         @media (min-width: 600px) {
@@ -86,7 +90,7 @@
             display: block;
             font-weight: 600;
             margin-bottom: 6px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -97,7 +101,7 @@
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             background-color: #fafafa;
             transition: border 0.2s;
         }
@@ -108,26 +112,28 @@
             background-color: #fff;
         }
 
-        /* Grid da Área de Trabalho */
+        /* Layout de Categorias e Serviços */
         .workspace-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
         @media (min-width: 768px) {
             .workspace-grid {
-                grid-template-columns: 220px 1fr;
+                display: grid;
+                grid-template-columns: 210px 1fr;
                 gap: 16px;
+                align-items: start;
             }
         }
 
-        /* Menu de Categorias - Estilo Scroll Horizontal no Celular, Vertical no PC */
+        /* Menu de Categorias - Scroll Horizontal no Celular */
         .category-menu {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
@@ -146,8 +152,8 @@
             .category-menu {
                 flex-direction: column;
                 overflow-x: visible;
+                max-height: 440px;
                 overflow-y: auto;
-                max-height: 480px;
                 padding-bottom: 0;
                 padding-right: 4px;
             }
@@ -156,7 +162,7 @@
         .cat-btn {
             display: flex;
             align-items: center;
-            padding: 10px 14px;
+            padding: 8px 14px;
             border: 1px solid var(--border-color);
             border-radius: 20px;
             background: #fff;
@@ -182,7 +188,7 @@
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
         }
 
         /* Lista de Serviços */
@@ -190,14 +196,14 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 380px;
+            max-height: 340px;
             overflow-y: auto;
             padding-right: 2px;
         }
 
         @media (min-width: 768px) {
             .services-list {
-                max-height: 480px;
+                max-height: 440px;
             }
         }
 
@@ -205,7 +211,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px;
+            padding: 10px 12px;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             cursor: pointer;
@@ -215,7 +221,7 @@
         }
 
         .service-item:active {
-            background-color: #e2e8f0;
+            background-color: #f1f5f9;
         }
 
         .service-item.selected {
@@ -226,8 +232,8 @@
         .service-info {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 0.9rem;
+            gap: 10px;
+            font-size: 0.88rem;
             font-weight: 500;
         }
 
@@ -241,24 +247,25 @@
         .service-price {
             font-weight: 700;
             color: var(--accent-green);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-align: right;
             white-space: nowrap;
             margin-left: 8px;
         }
 
-        /* Resumo */
+        /* Resumo Lateral / Inferior */
         .summary-card {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            gap: 16px;
         }
 
         .summary-details {
             border-bottom: 1px dashed var(--border-color);
             padding-bottom: 12px;
             margin-bottom: 12px;
-            max-height: 250px;
+            max-height: 240px;
             overflow-y: auto;
         }
 
@@ -283,14 +290,14 @@
             text-align: right;
             font-weight: 600;
             color: var(--accent-green);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             background: #fff;
         }
 
         .total-box {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
-            padding: 14px;
+            padding: 12px;
             border-radius: 12px;
             text-align: center;
             margin-bottom: 12px;
@@ -305,7 +312,7 @@
         }
 
         .total-amount {
-            font-size: 1.75rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: var(--accent-green);
         }
@@ -318,13 +325,13 @@
             border: none;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
             transition: background 0.2s, transform 0.1s;
         }
 
