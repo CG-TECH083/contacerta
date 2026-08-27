@@ -8,6 +8,8 @@
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
+            --whatsapp: #25d366;
+            --whatsapp-hover: #1da851;
             --bg-body: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #0f172a;
@@ -42,9 +44,7 @@
         }
 
         @media (min-width: 900px) {
-            body {
-                padding: 24px;
-            }
+            body { padding: 24px; }
             .container {
                 display: grid;
                 grid-template-columns: 1.4fr 1fr;
@@ -62,11 +62,7 @@
             width: 100%;
         }
 
-        @media (min-width: 600px) {
-            .card {
-                padding: 20px;
-            }
-        }
+        @media (min-width: 600px) { .card { padding: 20px; } }
 
         h1 {
             font-size: 1.25rem;
@@ -77,14 +73,9 @@
             gap: 8px;
         }
 
-        h2 {
-            font-size: 1.1rem;
-            color: var(--text-main);
-        }
+        h2 { font-size: 1.1rem; color: var(--text-main); }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 14px; }
 
         label {
             display: block;
@@ -112,7 +103,6 @@
             background-color: #fff;
         }
 
-        /* Layout de Categorias e Serviços */
         .workspace-grid {
             display: flex;
             flex-direction: column;
@@ -128,24 +118,12 @@
             }
         }
 
-        /* Menu de Categorias - Scroll Horizontal no Celular */
         .category-menu {
             display: flex;
             gap: 8px;
             overflow-x: auto;
             padding-bottom: 6px;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .category-menu::-webkit-scrollbar {
-            height: 4px;
-            width: 4px;
-        }
-
-        .category-menu::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
         }
 
         @media (min-width: 768px) {
@@ -154,8 +132,6 @@
                 overflow-x: visible;
                 max-height: 440px;
                 overflow-y: auto;
-                padding-bottom: 0;
-                padding-right: 4px;
             }
         }
 
@@ -171,7 +147,6 @@
             font-weight: 600;
             color: var(--text-muted);
             white-space: nowrap;
-            transition: all 0.2s;
             flex-shrink: 0;
         }
 
@@ -184,28 +159,22 @@
             }
         }
 
-        .cat-btn:active, .cat-btn.active {
+        .cat-btn.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
             box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
         }
 
-        /* Lista de Serviços */
         .services-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
             max-height: 340px;
             overflow-y: auto;
-            padding-right: 2px;
         }
 
-        @media (min-width: 768px) {
-            .services-list {
-                max-height: 440px;
-            }
-        }
+        @media (min-width: 768px) { .services-list { max-height: 440px; } }
 
         .service-item {
             display: flex;
@@ -216,12 +185,7 @@
             border-radius: 10px;
             cursor: pointer;
             background: #fff;
-            transition: background 0.15s, border-color 0.15s;
             user-select: none;
-        }
-
-        .service-item:active {
-            background-color: #f1f5f9;
         }
 
         .service-item.selected {
@@ -241,19 +205,15 @@
             width: 18px;
             height: 18px;
             accent-color: var(--primary);
-            cursor: pointer;
         }
 
         .service-price {
             font-weight: 700;
             color: var(--accent-green);
             font-size: 0.85rem;
-            text-align: right;
             white-space: nowrap;
-            margin-left: 8px;
         }
 
-        /* Resumo Lateral / Inferior */
         .summary-card {
             display: flex;
             flex-direction: column;
@@ -275,8 +235,6 @@
             align-items: center;
             font-size: 0.85rem;
             margin-bottom: 8px;
-            color: var(--text-main);
-            gap: 8px;
             background: #f8fafc;
             padding: 8px 10px;
             border-radius: 8px;
@@ -308,7 +266,6 @@
             color: #166534;
             text-transform: uppercase;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .total-amount {
@@ -317,10 +274,16 @@
             color: var(--accent-green);
         }
 
-        .btn-copy {
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-whatsapp {
             width: 100%;
             padding: 14px;
-            background: var(--primary);
+            background: var(--whatsapp);
             color: white;
             border: none;
             border-radius: 10px;
@@ -331,13 +294,23 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
         }
 
-        .btn-copy:active {
-            transform: scale(0.98);
-            background: var(--primary-hover);
+        .btn-copy {
+            width: 100%;
+            padding: 12px;
+            background: #f1f5f9;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
     </style>
 </head>
@@ -350,6 +323,11 @@
         <div class="form-group">
             <label for="clientName">Nome do Cliente</label>
             <input type="text" id="clientName" placeholder="Ex: Maria Souza" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label for="clientPhone">WhatsApp do Cliente (Opcional - Ex: 83999999999)</label>
+            <input type="text" id="clientPhone" placeholder="Deixe em branco para escolher o contato ao enviar" autocomplete="off">
         </div>
 
         <div class="workspace-grid">
@@ -380,9 +358,14 @@
                 <div class="total-amount" id="totalAmount">R$ 0,00</div>
             </div>
 
-            <button class="btn-copy" onclick="copyBudget()">
-                <span>📋</span> Copiar para WhatsApp
-            </button>
+            <div class="action-buttons">
+                <button class="btn-whatsapp" onclick="sendWhatsApp()">
+                    <span>💬</span> Enviar pelo WhatsApp
+                </button>
+                <button class="btn-copy" onclick="copyBudget()">
+                    <span>📋</span> Apenas Copiar Texto
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -394,20 +377,12 @@
             items: [
                 { id: "diag_1", name: "Diagnóstico técnico (Notebook)", price: 50, label: "R$ 50" },
                 { id: "diag_2", name: "Diagnóstico técnico (Desktop)", price: 40, label: "R$ 40" },
-                { id: "diag_3", name: "Diagnóstico + orçamento (Notebook)", price: 50, label: "R$ 50" },
-                { id: "diag_4", name: "Diagnóstico + orçamento (Desktop)", price: 40, label: "R$ 40" },
                 { id: "limp_1", name: "Limpeza interna (Notebook)", price: 80, label: "R$ 80" },
                 { id: "limp_2", name: "Limpeza interna (Desktop)", price: 70, label: "R$ 70" },
                 { id: "limp_3", name: "Limpeza + pasta térmica (Notebook)", price: 100, label: "R$ 100" },
                 { id: "limp_4", name: "Limpeza + pasta térmica (Desktop)", price: 90, label: "R$ 90" },
                 { id: "prev_1", name: "Manutenção preventiva (Notebook)", price: 130, label: "R$ 130" },
-                { id: "prev_2", name: "Manutenção preventiva (Desktop)", price: 120, label: "R$ 120" },
-                { id: "prev_3", name: "Manutenção Gamer (Notebook)", price: 160, label: "R$ 160" },
-                { id: "prev_4", name: "Manutenção Gamer (Desktop)", price: 150, label: "R$ 150" },
-                { id: "cool_1", name: "Limpeza cooler (Notebook)", price: 80, label: "R$ 80" },
-                { id: "cool_2", name: "Limpeza cooler (Desktop)", price: 60, label: "R$ 60" },
-                { id: "past_1", name: "Pasta térmica (Notebook)", price: 70, label: "R$ 70" },
-                { id: "past_2", name: "Pasta térmica (Desktop)", price: 60, label: "R$ 60" }
+                { id: "prev_2", name: "Manutenção preventiva (Desktop)", price: 120, label: "R$ 120" }
             ]
         },
         {
@@ -415,32 +390,19 @@
             items: [
                 { id: "fmt_1", name: "Formatação Windows + drivers", price: 100, label: "R$ 100" },
                 { id: "fmt_2", name: "Formatação + config. completa", price: 130, label: "R$ 130" },
-                { id: "fmt_3", name: "Instalação Windows + drivers", price: 80, label: "R$ 80" },
-                { id: "fmt_4", name: "Instalação Linux", price: 100, label: "R$ 100" },
-                { id: "soft_1", name: "Instalação de programas", price: 15, label: "R$ 15/un." },
                 { id: "soft_2", name: "Pacote programas básicos", price: 60, label: "R$ 60" },
-                { id: "cfg_1", name: "Configuração de usuário", price: 40, label: "R$ 40" },
-                { id: "cfg_2", name: "Configuração de e-mail", price: 40, label: "R$ 40" },
-                { id: "cfg_3", name: "Configuração de impressora", price: 50, label: "R$ 50" },
-                { id: "cfg_4", name: "Configuração de scanner", price: 50, label: "R$ 50" },
-                { id: "vir_1", name: "Remoção de vírus/malware", price: 100, label: "R$ 100–150" },
-                { id: "otm_1", name: "Otimização do Windows", price: 80, label: "R$ 80" },
-                { id: "drv_1", name: "Atualização de drivers", price: 50, label: "R$ 50" },
-                { id: "bak_1", name: "Configuração de backup", price: 80, label: "R$ 80–150" }
+                { id: "vir_1", name: "Remoção de vírus/malware", price: 100, label: "R$ 100" },
+                { id: "otm_1", name: "Otimização do Windows", price: 80, label: "R$ 80" }
             ]
         },
         {
             category: "💾 HD, SSD e RAM",
             items: [
                 { id: "hd_1", name: "Instalação memória RAM", price: 50, label: "R$ 50" },
-                { id: "hd_2", name: "Troca de HD", price: 70, label: "R$ 70" },
                 { id: "hd_3", name: "Troca SSD desktop", price: 70, label: "R$ 70" },
                 { id: "hd_4", name: "Troca SSD notebook", price: 90, label: "R$ 90" },
                 { id: "hd_5", name: "SSD + Clonagem", price: 130, label: "R$ 130" },
-                { id: "hd_6", name: "Clonagem HD/SSD", price: 100, label: "R$ 100" },
-                { id: "hd_7", name: "Migração completa SSD", price: 150, label: "R$ 150" },
-                { id: "hd_8", name: "Recuperação de arquivos", price: 100, label: "R$ 100–200" },
-                { id: "hd_9", name: "Backup de arquivos", price: 80, label: "R$ 80–150" }
+                { id: "hd_8", name: "Recuperação de arquivos", price: 100, label: "R$ 100" }
             ]
         },
         {
@@ -448,54 +410,17 @@
             items: [
                 { id: "desk_1", name: "Montagem de PC", price: 180, label: "R$ 180" },
                 { id: "desk_2", name: "Montagem de PC Gamer", price: 250, label: "R$ 250" },
-                { id: "desk_3", name: "Upgrade de computador", price: 100, label: "R$ 100–180" },
                 { id: "desk_4", name: "Troca de fonte", price: 70, label: "R$ 70" },
-                { id: "desk_5", name: "Troca de placa de vídeo", price: 80, label: "R$ 80" },
-                { id: "desk_6", name: "Instalação de cooler", price: 80, label: "R$ 80" },
-                { id: "desk_7", name: "Instalação water cooler", price: 150, label: "R$ 150" },
-                { id: "desk_8", name: "Troca de placa-mãe", price: 150, label: "R$ 150" },
-                { id: "desk_9", name: "Organização de cabos", price: 80, label: "R$ 80" },
-                { id: "desk_11", name: "Configuração BIOS/UEFI", price: 80, label: "R$ 80" }
+                { id: "desk_8", name: "Troca de placa-mãe", price: 150, label: "R$ 150" }
             ]
         },
         {
             category: "💻 Notebooks",
             items: [
-                { id: "not_1", name: "Troca de teclado", price: 100, label: "R$ 100–180" },
-                { id: "not_2", name: "Troca de tela", price: 120, label: "R$ 120–200" },
-                { id: "not_3", name: "Troca de bateria", price: 70, label: "R$ 70–120" },
-                { id: "not_4", name: "Troca HD/SSD", price: 80, label: "R$ 80–120" },
-                { id: "not_5", name: "Upgrade memória", price: 60, label: "R$ 60–100" },
-                { id: "not_6", name: "Limpeza interna", price: 80, label: "R$ 80–120" },
-                { id: "not_7", name: "Limpeza + pasta térmica", price: 100, label: "R$ 100–150" },
-                { id: "not_8", name: "Troca de cooler", price: 120, label: "R$ 120–180" },
-                { id: "not_9", name: "Troca de carcaça", price: 180, label: "R$ 180–300" },
-                { id: "not_10", name: "Troca de dobradiça", price: 150, label: "R$ 150–300" },
-                { id: "not_11", name: "Troca conector DC Jack", price: 150, label: "R$ 150–250" },
-                { id: "not_13", name: "Troca placa-mãe", price: 200, label: "R$ 200–350" }
-            ]
-        },
-        {
-            category: "🖨️ Impressoras",
-            items: [
-                { id: "imp_1", name: "Instalação impressora", price: 50, label: "R$ 50" },
-                { id: "imp_2", name: "Configuração Wi-Fi", price: 70, label: "R$ 70" },
-                { id: "imp_3", name: "Configuração em rede", price: 80, label: "R$ 80" },
-                { id: "imp_4", name: "Instalação de driver", price: 40, label: "R$ 40" },
-                { id: "imp_5", name: "Manutenção básica", price: 80, label: "R$ 80" },
-                { id: "imp_6", name: "Limpeza interna", price: 80, label: "R$ 80–120" },
-                { id: "imp_8", name: "Impressora térmica", price: 70, label: "R$ 70" }
-            ]
-        },
-        {
-            category: "🏢 Empresarial",
-            items: [
-                { id: "emp_1", name: "Suporte remoto (hora)", price: 50, label: "R$ 50–80/h" },
-                { id: "emp_2", name: "Suporte presencial (hora)", price: 80, label: "R$ 80–120/h" },
-                { id: "emp_3", name: "Atendimento emergencial", price: 120, label: "R$ 120–180/h" },
-                { id: "emp_5", name: "Configuração novo PC", price: 100, label: "R$ 100–150" },
-                { id: "emp_7", name: "Impressora em rede", price: 80, label: "R$ 80–120" },
-                { id: "emp_9", name: "Visita técnica", price: 80, label: "R$ 80–120" }
+                { id: "not_1", name: "Troca de teclado", price: 100, label: "R$ 100" },
+                { id: "not_2", name: "Troca de tela", price: 120, label: "R$ 120" },
+                { id: "not_3", name: "Troca de bateria", price: 70, label: "R$ 70" },
+                { id: "not_10", name: "Troca de dobradiça", price: 150, label: "R$ 150" }
             ]
         }
     ];
@@ -597,7 +522,7 @@
         document.getElementById('totalAmount').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
-    function copyBudget() {
+    function generateBudgetText() {
         const client = document.getElementById('clientName').value.trim() || 'Cliente';
         let total = 0;
         let text = `*ORÇAMENTO DE SERVIÇOS DE INFORMÁTICA*\n`;
@@ -607,8 +532,7 @@
         const keys = Object.keys(selectedServices);
 
         if (keys.length === 0) {
-            alert('Selecione pelo menos um serviço antes de copiar!');
-            return;
+            return null;
         }
 
         keys.forEach(id => {
@@ -618,6 +542,37 @@
         });
 
         text += `\n💵 *Total Final:* R$ ${total.toFixed(2).replace('.', ',')}`;
+        return text;
+    }
+
+    function sendWhatsApp() {
+        const text = generateBudgetText();
+        if (!text) {
+            alert('Selecione pelo menos um serviço antes de enviar!');
+            return;
+        }
+
+        let phone = document.getElementById('clientPhone').value.replace(/\D/g, '');
+        let url = '';
+
+        if (phone.length >= 10) {
+            if (!phone.startsWith('55')) {
+                phone = '55' + phone;
+            }
+            url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
+        } else {
+            url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        }
+
+        window.open(url, '_blank');
+    }
+
+    function copyBudget() {
+        const text = generateBudgetText();
+        if (!text) {
+            alert('Selecione pelo menos um serviço antes de copiar!');
+            return;
+        }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
@@ -638,14 +593,13 @@
         textArea.select();
         try {
             document.execCommand('copy');
-            alert('Orçamento copiado com sucesso!');
+            alert('Orçamento copiado!');
         } catch (err) {
             alert('Não foi possível copiar automaticamente.');
         }
         document.body.removeChild(textArea);
     }
 
-    // Inicialização
     initCategories();
     renderServices();
 </script>
