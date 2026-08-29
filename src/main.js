@@ -1,12 +1,33 @@
 import './styles.css';
 import { database } from './database.js';
 
+// Gerenciador do número do orçamento via localStorage
+function getNextQuoteNumber() {
+    let current = localStorage.getItem('contacerta_quote_number');
+    if (!current) {
+        current = 1001; // Número inicial
+    } else {
+        current = parseInt(current, 10);
+    }
+    return current;
+}
+
+function incrementQuoteNumber() {
+    let current = getNextQuoteNumber();
+    localStorage.setItem('contacerta_quote_number', current + 1);
+}
+
+let currentQuoteNumber = getNextQuoteNumber();
+
 const app = document.getElementById('root');
 
 app.innerHTML = `
 <div class="container">
     <div class="card">
-        <h1>🛠️ Orçamento</h1>
+        <div class="header-title">
+            <h1>🛠️ Orçamento</h1>
+            <span class="quote-number-tag" id="quoteNumberBadge">#${currentQuoteNumber}</span>
+        </div>
         
         <div class="form-group">
             <label class="section-title" for="clientName">Nome do Cliente</label>
@@ -20,7 +41,7 @@ app.innerHTML = `
             </div>
 
             <div>
-                <label class="section-title" id="categoryTitle">Serviços: 🛠️ DIAGNÓSTICO</label>
+                <label class="section-title" id="categoryTitle">Serviços: 🛠️ DIAGNÓSTICO E MANUTENÇÃO</label>
                 <div class="services-list" id="servicesList"></div>
             </div>
         </div>
@@ -174,16 +195,17 @@ function calculateTotal() {
 document.getElementById('btnCopy').onclick = () => {
     const client = document.getElementById('clientName').value || 'Cliente';
     let total = 0;
-    let text = `*ORÇAMENTO DE SERVIÇOS DE INFORMÁTICA*\n`;
-    text += `👤 *Cliente:* ${client}\n\n`;
-    text += `*Serviços Selecionados:*\n`;
-
+    
     const keys = Object.keys(selectedServices);
 
     if (keys.length === 0) {
         alert('Selecione pelo menos um serviço antes de copiar!');
         return;
     }
+
+    let text = `*ORÇAMENTO #${currentQuoteNumber}*\n`;
+    text += `👤 *Cliente:* ${client}\n\n`;
+    text += `*Serviços Selecionados:*\n`;
 
     keys.forEach(id => {
         const item = selectedServices[id];
@@ -194,7 +216,12 @@ document.getElementById('btnCopy').onclick = () => {
     text += `\n💵 *Total Final:* R$ ${total.toFixed(2).replace('.', ',')}`;
 
     navigator.clipboard.writeText(text).then(() => {
-        alert('Orçamento copiado com sucesso!');
+        alert(`Orçamento #${currentQuoteNumber} copiado com sucesso!`);
+        
+        // Incrementar o número do orçamento para a próxima vez
+        incrementQuoteNumber();
+        currentQuoteNumber = getNextQuoteNumber();
+        document.getElementById('quoteNumberBadge').innerText = `#${currentQuoteNumber}`;
     });
 };
 
