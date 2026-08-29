@@ -1,46 +1,31 @@
 import './styles.css';
 import { database } from './database.js';
 
-function getNextQuoteNumber() {
-    let current = localStorage.getItem('contacerta_quote_number');
-    if (!current) {
-        current = 1001;
-    } else {
-        current = parseInt(current, 10);
-    }
-    return current;
-}
-
-function incrementQuoteNumber() {
-    let current = getNextQuoteNumber();
-    localStorage.setItem('contacerta_quote_number', current + 1);
-}
-
-let currentQuoteNumber = getNextQuoteNumber();
-
 const app = document.getElementById('root');
 
 app.innerHTML = `
 <div class="container">
     <div class="card">
-        <div class="header-title">
-            <h1>🛠️ Orçamento</h1>
-            <span class="quote-number-tag" id="quoteNumberBadge">#${currentQuoteNumber}</span>
-        </div>
+        <h1>🛠️ Gerador de Orçamento</h1>
         
         <div class="form-group">
-            <label class="section-title" for="clientName">Nome do Cliente</label>
+            <label class="section-title" for="clientName">NOME DO CLIENTE</label>
             <input type="text" id="clientName" placeholder="Ex: Maria Souza">
+        </div>
+
+        <div class="form-group">
+            <label class="section-title" for="clientPhone">WHATSAPP DO CLIENTE (OPCIONAL - EX: 83999999999)</label>
+            <input type="text" id="clientPhone" placeholder="Deixe em branco para escolher o contato ao enviar">
         </div>
 
         <div class="workspace-grid">
             <div>
-                <label class="section-title">Categorias</label>
+                <label class="section-title">CATEGORIAS</label>
                 <div class="category-vertical-menu" id="categoryMenu"></div>
             </div>
 
             <div>
-                <label class="section-title" id="categoryTitle">SERVIÇOS</label>
+                <label class="section-title" id="categoryTitle">SERVIÇOS: 🛠️ DIAGNÓSTICO</label>
                 <div class="services-list" id="servicesList"></div>
             </div>
         </div>
@@ -56,11 +41,14 @@ app.innerHTML = `
 
         <div>
             <div class="total-box">
-                <div class="total-title">Valor Total Calculado</div>
+                <div class="total-title">VALOR TOTAL CALCULADO</div>
                 <div class="total-amount" id="totalAmount">R$ 0,00</div>
             </div>
 
-            <button class="btn-copy" id="btnWhatsapp">📋 Copiar para WhatsApp</button>
+            <div class="action-buttons">
+                <button class="btn-whatsapp" id="btnSendWhatsapp">💬 Enviar pelo WhatsApp</button>
+                <button class="btn-copy-gray" id="btnJustCopy">📋 Apenas Copiar Texto</button>
+            </div>
         </div>
     </div>
 </div>
@@ -191,20 +179,15 @@ function calculateTotal() {
     document.getElementById('totalAmount').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-document.getElementById('btnWhatsapp').onclick = () => {
+function generateMessageText() {
     const client = document.getElementById('clientName').value || 'Cliente';
     let total = 0;
     
-    const keys = Object.keys(selectedServices);
-
-    if (keys.length === 0) {
-        alert('Selecione pelo menos um serviço antes de enviar!');
-        return;
-    }
-
-    let text = `*ORÇAMENTO #${currentQuoteNumber}*\n`;
+    let text = `*ORÇAMENTO DE SERVIÇOS DE INFORMÁTICA*\n`;
     text += `👤 *Cliente:* ${client}\n\n`;
     text += `*Serviços Selecionados:*\n`;
+
+    const keys = Object.keys(selectedServices);
 
     keys.forEach(id => {
         const item = selectedServices[id];
@@ -213,17 +196,42 @@ document.getElementById('btnWhatsapp').onclick = () => {
     });
 
     text += `\n💵 *Total Final:* R$ ${total.toFixed(2).replace('.', ',')}`;
+    return { text, total };
+}
 
-    // Copia o texto para a área de transferência
+// Botão Enviar pelo WhatsApp
+document.getElementById('btnSendWhatsapp').onclick = () => {
+    const keys = Object.keys(selectedServices);
+    if (keys.length === 0) {
+        alert('Selecione pelo menos um serviço antes de enviar!');
+        return;
+    }
+
+    const { text } = generateMessageText();
+    const phoneInput = document.getElementById('clientPhone').value.replace(/\D/g, '');
+    const encodedText = encodeURIComponent(text);
+
+    let url = '';
+    if (phoneInput) {
+        url = `https://api.whatsapp.com/send?phone=55${phoneInput}&text=${encodedText}`;
+    } else {
+        url = `https://api.whatsapp.com/send?text=${encodedText}`;
+    }
+
+    window.open(url, '_blank');
+};
+
+// Botão Apenas Copiar Texto
+document.getElementById('btnJustCopy').onclick = () => {
+    const keys = Object.keys(selectedServices);
+    if (keys.length === 0) {
+        alert('Selecione pelo menos um serviço antes de copiar!');
+        return;
+    }
+
+    const { text } = generateMessageText();
     navigator.clipboard.writeText(text).then(() => {
-        // Incrementa o número para o próximo orçamento
-        incrementQuoteNumber();
-        currentQuoteNumber = getNextQuoteNumber();
-        document.getElementById('quoteNumberBadge').innerText = `#${currentQuoteNumber}`;
-
-        // Abre o WhatsApp Web / App com a mensagem pronta
-        const encodedText = encodeURIComponent(text);
-        window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+        alert('Orçamento copiado para a área de transferência!');
     });
 };
 
