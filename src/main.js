@@ -1,11 +1,10 @@
 import './styles.css';
 import { database } from './database.js';
 
-// Gerenciador do número do orçamento via localStorage
 function getNextQuoteNumber() {
     let current = localStorage.getItem('contacerta_quote_number');
     if (!current) {
-        current = 1001; // Número inicial
+        current = 1001;
     } else {
         current = parseInt(current, 10);
     }
@@ -41,7 +40,7 @@ app.innerHTML = `
             </div>
 
             <div>
-                <label class="section-title" id="categoryTitle">Serviços: 🛠️ DIAGNÓSTICO E MANUTENÇÃO</label>
+                <label class="section-title" id="categoryTitle">SERVIÇOS</label>
                 <div class="services-list" id="servicesList"></div>
             </div>
         </div>
@@ -61,7 +60,7 @@ app.innerHTML = `
                 <div class="total-amount" id="totalAmount">R$ 0,00</div>
             </div>
 
-            <button class="btn-copy" id="btnCopy">📋 Copiar para WhatsApp</button>
+            <button class="btn-copy" id="btnWhatsapp">📋 Copiar para WhatsApp</button>
         </div>
     </div>
 </div>
@@ -192,14 +191,14 @@ function calculateTotal() {
     document.getElementById('totalAmount').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-document.getElementById('btnCopy').onclick = () => {
+document.getElementById('btnWhatsapp').onclick = () => {
     const client = document.getElementById('clientName').value || 'Cliente';
     let total = 0;
     
     const keys = Object.keys(selectedServices);
 
     if (keys.length === 0) {
-        alert('Selecione pelo menos um serviço antes de copiar!');
+        alert('Selecione pelo menos um serviço antes de enviar!');
         return;
     }
 
@@ -215,13 +214,16 @@ document.getElementById('btnCopy').onclick = () => {
 
     text += `\n💵 *Total Final:* R$ ${total.toFixed(2).replace('.', ',')}`;
 
+    // Copia o texto para a área de transferência
     navigator.clipboard.writeText(text).then(() => {
-        alert(`Orçamento #${currentQuoteNumber} copiado com sucesso!`);
-        
-        // Incrementar o número do orçamento para a próxima vez
+        // Incrementa o número para o próximo orçamento
         incrementQuoteNumber();
         currentQuoteNumber = getNextQuoteNumber();
         document.getElementById('quoteNumberBadge').innerText = `#${currentQuoteNumber}`;
+
+        // Abre o WhatsApp Web / App com a mensagem pronta
+        const encodedText = encodeURIComponent(text);
+        window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
     });
 };
 
