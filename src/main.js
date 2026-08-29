@@ -6,7 +6,7 @@ const app = document.getElementById('root');
 app.innerHTML = `
 <div class="container">
     <div class="card">
-        <h1>🛠️ Gerador de Orçamento</h1>
+        <h1>🛠️ Orçamento</h1>
         
         <div class="form-group">
             <label class="section-title" for="clientName">Nome do Cliente</label>
