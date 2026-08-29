@@ -1,119 +1,202 @@
 import './styles.css';
+import { database } from './database.js';
 
-// Seleciona o contêiner principal da página
 const app = document.getElementById('root');
 
-// Estrutura inicial do HTML dentro da div #root
 app.innerHTML = `
-  <div class="container">
-    <header>
-      <h1>Conta Certa</h1>
-      <p>Gerador de Orçamentos de Serviços Autônomos</p>
-    </header>
-
-    <main class="content">
-      <section class="card form-section">
-        <h2>Adicionar Item / Serviço</h2>
-        <form id="orcamento-form">
-          <div class="input-group">
-            <label for="descricao">Descrição do Serviço</label>
-            <input type="text" id="descricao" placeholder="Ex: Manutenção de Computador" required />
-          </div>
-
-          <div class="input-row">
-            <div class="input-group">
-              <label for="quantidade">Qtd / Horas</label>
-              <input type="number" id="quantidade" min="1" value="1" required />
-            </div>
-
-            <div class="input-group">
-              <label for="valor">Valor Unitário (R$)</label>
-              <input type="number" id="valor" step="0.01" placeholder="150,00" required />
-            </div>
-          </div>
-
-          <button type="submit" class="btn-primary">Adicionar ao Orçamento</button>
-        </form>
-      </section>
-
-      <section class="card summary-section">
-        <h2>Resumo do Orçamento</h2>
-        <table id="tabela-itens">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Qtd</th>
-              <th>Unit.</th>
-              <th>Total</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="lista-orcamento">
-            <!-- Os itens adicionados entrarão aqui -->
-          </tbody>
-        </table>
-
-        <div class="total-box">
-          <h3>Total Geral: <span id="valor-total">R$ 0,00</span></h3>
+<div class="container">
+    <div class="card">
+        <h1>🛠️ Gerador de Orçamento</h1>
+        
+        <div class="form-group">
+            <label class="section-title" for="clientName">Nome do Cliente</label>
+            <input type="text" id="clientName" placeholder="Ex: Maria Souza">
         </div>
-      </section>
-    </main>
-  </div>
+
+        <div class="workspace-grid">
+            <div>
+                <label class="section-title">Categorias</label>
+                <div class="category-vertical-menu" id="categoryMenu"></div>
+            </div>
+
+            <div>
+                <label class="section-title" id="categoryTitle">Serviços: 🛠️ DIAGNÓSTICO</label>
+                <div class="services-list" id="servicesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card summary-card">
+        <div>
+            <h2>📋 Resumo do Orçamento</h2>
+            <div class="summary-details" id="summaryDetails">
+                <p class="empty-msg">Nenhum serviço selecionado.</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="total-box">
+                <div class="total-title">Valor Total Calculado</div>
+                <div class="total-amount" id="totalAmount">R$ 0,00</div>
+            </div>
+
+            <button class="btn-copy" id="btnCopy">📋 Copiar para WhatsApp</button>
+        </div>
+    </div>
+</div>
 `;
 
-// Lógica da aplicação
-let itens = [];
+let activeCategoryIndex = 0;
+let selectedServices = {};
 
-const form = document.getElementById('orcamento-form');
-const listaOrcamento = document.getElementById('lista-orcamento');
-const valorTotalElement = document.getElementById('valor-total');
+function initCategories() {
+    const menuContainer = document.getElementById('categoryMenu');
+    menuContainer.innerHTML = '';
 
-// Adicionar novo item
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const descricao = document.getElementById('descricao').value;
-  const quantidade = parseFloat(document.getElementById('quantidade').value);
-  const valor = parseFloat(document.getElementById('valor').value);
-
-  const totalItem = quantidade * valor;
-
-  itens.push({ id: Date.now(), descricao, quantidade, valor, totalItem });
-
-  form.reset();
-  atualizarInterface();
-});
-
-// Remover item
-window.removerItem = function (id) {
-  itens = itens.filter(item => item.id !== id);
-  atualizarInterface();
-};
-
-// Renderizar lista e calcular total
-function atualizarInterface() {
-  listaOrcamento.innerHTML = '';
-  let totalGeral = 0;
-
-  if (itens.length === 0) {
-    listaOrcamento.innerHTML = `<tr><td colspan="5" class="empty">Nenhum serviço adicionado.</td></tr>`;
-  } else {
-    itens.forEach(item => {
-      totalGeral += item.totalItem;
-      listaOrcamento.innerHTML += `
-        <tr>
-          <td>${item.descricao}</td>
-          <td>${item.quantidade}</td>
-          <td>R$ ${item.valor.toFixed(2)}</td>
-          <td>R$ ${item.totalItem.toFixed(2)}</td>
-          <td><button class="btn-del" onclick="removerItem(${item.id})">❌</button></td>
-        </tr>
-      `;
+    database.forEach((cat, index) => {
+        const btn = document.createElement('button');
+        btn.className = `cat-btn ${index === activeCategoryIndex ? 'active' : ''}`;
+        btn.innerHTML = cat.category;
+        btn.onclick = () => {
+            activeCategoryIndex = index;
+            initCategories();
+            renderServices();
+        };
+        menuContainer.appendChild(btn);
     });
-  }
-
-  valorTotalElement.textContent = `R$ ${totalGeral.toFixed(2)}`;
 }
 
-// Inicializa a tabela vazia
-atualizarInterface();
+function renderServices() {
+    const listContainer = document.getElementById('servicesList');
+    const categoryTitle = document.getElementById('categoryTitle');
+    
+    listContainer.innerHTML = '';
+    const currentCategory = database[activeCategoryIndex];
+    categoryTitle.innerText = `SERVIÇOS: ${currentCategory.category.toUpperCase()}`;
+
+    currentCategory.items.forEach((item) => {
+        const isChecked = !!selectedServices[item.id];
+
+        const div = document.createElement('div');
+        div.className = 'service-item';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = isChecked;
+        checkbox.onclick = (e) => e.stopPropagation();
+        checkbox.onchange = (e) => toggleService(item, e.target.checked);
+
+        div.onclick = (e) => {
+            if (e.target !== checkbox) {
+                toggleService(item, !checkbox.checked);
+            }
+        };
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'service-info';
+        
+        const spanName = document.createElement('span');
+        spanName.innerText = item.name;
+
+        infoDiv.appendChild(checkbox);
+        infoDiv.appendChild(spanName);
+
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'service-price';
+        priceDiv.innerText = item.label || `R$ ${item.price}`;
+
+        div.appendChild(infoDiv);
+        div.appendChild(priceDiv);
+        listContainer.appendChild(div);
+    });
+}
+
+function toggleService(item, isSelected) {
+    if (isSelected) {
+        selectedServices[item.id] = { name: item.name, price: item.price };
+    } else {
+        delete selectedServices[item.id];
+    }
+    renderServices();
+    calculateTotal();
+}
+
+function calculateTotal() {
+    let total = 0;
+    const summaryDetails = document.getElementById('summaryDetails');
+    summaryDetails.innerHTML = '';
+
+    const keys = Object.keys(selectedServices);
+
+    if (keys.length === 0) {
+        summaryDetails.innerHTML = '<p class="empty-msg">Nenhum serviço selecionado.</p>';
+    } else {
+        keys.forEach(id => {
+            const item = selectedServices[id];
+            total += item.price;
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'summary-item';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.innerText = item.name;
+
+            const priceContainer = document.createElement('div');
+            priceContainer.style.display = 'flex';
+            priceContainer.style.alignItems = 'center';
+            priceContainer.style.gap = '4px';
+
+            const currencySpan = document.createElement('span');
+            currencySpan.innerText = 'R$';
+
+            const priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.className = 'price-input-custom';
+            priceInput.value = item.price;
+            priceInput.onchange = (e) => {
+                selectedServices[id].price = parseFloat(e.target.value) || 0;
+                calculateTotal();
+            };
+
+            priceContainer.appendChild(currencySpan);
+            priceContainer.appendChild(priceInput);
+
+            itemDiv.appendChild(nameSpan);
+            itemDiv.appendChild(priceContainer);
+
+            summaryDetails.appendChild(itemDiv);
+        });
+    }
+
+    document.getElementById('totalAmount').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+}
+
+document.getElementById('btnCopy').onclick = () => {
+    const client = document.getElementById('clientName').value || 'Cliente';
+    let total = 0;
+    let text = `*ORÇAMENTO DE SERVIÇOS DE INFORMÁTICA*\n`;
+    text += `👤 *Cliente:* ${client}\n\n`;
+    text += `*Serviços Selecionados:*\n`;
+
+    const keys = Object.keys(selectedServices);
+
+    if (keys.length === 0) {
+        alert('Selecione pelo menos um serviço antes de copiar!');
+        return;
+    }
+
+    keys.forEach(id => {
+        const item = selectedServices[id];
+        total += item.price;
+        text += `• ${item.name}: R$ ${item.price.toFixed(2).replace('.', ',')}\n`;
+    });
+
+    text += `\n💵 *Total Final:* R$ ${total.toFixed(2).replace('.', ',')}`;
+
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Orçamento copiado com sucesso!');
+    });
+};
+
+initCategories();
+renderServices();
