@@ -275,3 +275,24 @@ input[type="text"]:focus {
 .btn-copy:hover {
   background: var(--primary-hover);
 }
+
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header-title h1 {
+  margin-bottom: 0;
+}
+
+.quote-number-tag {
+  background-color: #eff6ff;
+  color: var(--primary);
+  border: 1px solid #bfdbfe;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
